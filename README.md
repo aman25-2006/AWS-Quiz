@@ -24,8 +24,8 @@ Students scan a QR code on the table, enter their basic details (Name, Roll Numb
 
 ## 🚀 Live Demo & Deployment
 
-- **Repository**: [https://github.com/aman25-2006/aws-builder-challenge](https://github.com/aman25-2006/aws-builder-challenge)
-- **Live GitHub Pages URL**: [https://aman25-2006.github.io/aws-builder-challenge/](https://aman25-2006.github.io/aws-builder-challenge/)
+- **Repository**: [https://github.com/aman25-2006/AWS-Quiz](https://github.com/aman25-2006/AWS-Quiz)
+- **Live GitHub Pages URL**: [https://aman25-2006.github.io/AWS-Quiz/](https://aman25-2006.github.io/AWS-Quiz/)
 
 ---
 
@@ -166,18 +166,18 @@ git branch -M main
 
 ### Step 3: Link and Push
 ```bash
-git remote add origin https://github.com/aman25-2006/aws-builder-challenge.git
+git remote add origin https://github.com/aman25-2006/AWS-Quiz.git
 git push -u origin main
 ```
 
 ### Step 4: Enable GitHub Pages
 1. Go to your repository settings:  
-   `https://github.com/aman25-2006/aws-builder-challenge/settings/pages`
+   `https://github.com/aman25-2006/AWS-Quiz/settings/pages`
 2. Under **Build and deployment** > **Source**:
    - Select **GitHub Actions** (the included `.github/workflows/deploy.yml` workflow will automatically build and deploy the app).
    - *Alternatively*, select **Deploy from a branch**, choose `main` branch, and root `/ (root)`.
 3. Within 1–2 minutes, your website will be live at:  
-   👉 **`https://aman25-2006.github.io/aws-builder-challenge/`**
+   👉 **`https://aman25-2006.github.io/AWS-Quiz/`**
 
 ---
 
