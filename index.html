@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="theme-color" content="#0b0f19">
+  <meta name="description" content="AWS Builder Challenge - Interactive cloud quiz for the AWS Builder Center Tabling Event organized by Aman Kumar, AWS Student Builder Campus Leader.">
+  <title>AWS Builder Challenge | Tabling Event Quiz</title>
+  
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Background Glow & Grid Elements -->
+  <div class="bg-grid-pattern" aria-hidden="true"></div>
+  <div class="bg-glow bg-glow-1" aria-hidden="true"></div>
+  <div class="bg-glow bg-glow-2" aria-hidden="true"></div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-container">
+      <div class="branding">
+        <span class="brand-badge-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
+          </svg>
+        </span>
+        <div class="branding-text">
+          <span class="brand-title">AWS BUILDER CHALLENGE</span>
+          <span class="brand-subtitle">Campus Tabling Event</span>
+        </div>
+      </div>
+      <div class="header-event-tag">
+        <span class="status-indicator"></span>
+        <span>Live Event</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="main-content" id="mainContent">
+
+    <!-- ========================================== -->
+    <!-- SCREEN 1: WELCOME SCREEN                   -->
+    <!-- ========================================== -->
+    <section id="screenWelcome" class="screen screen-active" aria-labelledby="welcomeHeading">
+      <div class="container screen-container">
+        <div class="card welcome-card">
+          <div class="event-pill">
+            <span class="pill-spark" aria-hidden="true">⚡</span>
+            <span>AWS Builder Center Tabling Event</span>
+          </div>
+
+          <h1 id="welcomeHeading" class="welcome-title">AWS BUILDER CHALLENGE</h1>
+          
+          <p class="welcome-subtitle">
+            Test your AWS &amp; Cloud knowledge in a quick 5-minute challenge.
+          </p>
+
+          <div class="event-meta-grid">
+            <div class="meta-item">
+              <span class="meta-icon" aria-hidden="true">⏱️</span>
+              <span class="meta-label">Duration</span>
+              <strong class="meta-value">5 Minutes</strong>
+            </div>
+            <div class="meta-item">
+              <span class="meta-icon" aria-hidden="true">📝</span>
+              <span class="meta-label">Format</span>
+              <strong class="meta-value">10 Questions</strong>
+            </div>
+            <div class="meta-item">
+              <span class="meta-icon" aria-hidden="true">🏆</span>
+              <span class="meta-label">Result</span>
+              <strong class="meta-value">Instant Card</strong>
+            </div>
+          </div>
+
+          <div class="organizer-box">
+            <div class="organizer-avatar" aria-hidden="true">AK</div>
+            <div class="organizer-info">
+              <span class="organizer-label">Event Organizer</span>
+              <span class="organizer-name">Aman Kumar</span>
+              <span class="organizer-role">AWS Student Builder Campus Leader</span>
+            </div>
+          </div>
+
+          <div class="welcome-cta-group">
+            <button id="btnStartChallenge" class="btn btn-primary btn-block btn-lg" type="button">
+              <span>START CHALLENGE</span>
+              <svg class="btn-arrow" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+            <p class="encouragement-text">
+              ✨ No AWS experience? No problem. Just give it a try!
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ========================================== -->
+    <!-- SCREEN 2: PARTICIPANT DETAILS SCREEN       -->
+    <!-- ========================================== -->
+    <section id="screenDetails" class="screen" aria-labelledby="detailsHeading" hidden>
+      <div class="container screen-container">
+        <div class="card form-card">
+          <div class="card-header-bar">
+            <button id="btnBackToWelcome" class="btn-back" type="button" aria-label="Go back to welcome screen">
+              <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/>
+              </svg>
+              <span>Back</span>
+            </button>
+            <span class="step-indicator">Step 1 of 2</span>
+          </div>
+
+          <h2 id="detailsHeading" class="section-title">Participant Details</h2>
+          <p class="section-subtitle">
+            Enter your details before beginning the challenge. These will be printed on your digital result card.
+          </p>
+
+          <form id="participantForm" novalidate>
+            <!-- Full Name -->
+            <div class="form-group">
+              <label for="inputFullName" class="form-label">
+                Full Name <span class="required-star" aria-hidden="true">*</span>
+              </label>
+              <div class="input-wrapper">
+                <input 
+                  type="text" 
+                  id="inputFullName" 
+                  name="fullName" 
+                  class="form-input" 
+                  placeholder="e.g. Alex Johnson"
+                  autocomplete="name"
+                  minlength="2"
+                  maxlength="60"
+                  required
+                  aria-describedby="nameError nameHint"
+                >
+                <span class="input-icon" aria-hidden="true">👤</span>
+              </div>
+              <span id="nameHint" class="input-hint">Minimum 2 characters</span>
+              <span id="nameError" class="input-error" role="alert" aria-live="polite"></span>
+            </div>
+
+            <!-- Roll Number -->
+            <div class="form-group">
+              <label for="inputRollNumber" class="form-label">
+                College Roll Number <span class="required-star" aria-hidden="true">*</span>
+              </label>
+              <div class="input-wrapper">
+                <input 
+                  type="text" 
+                  id="inputRollNumber" 
+                  name="rollNumber" 
+                  class="form-input" 
+                  placeholder="e.g. 21BCSE102 or 2022-CS-45"
+                  autocomplete="off"
+                  maxlength="30"
+                  required
+                  aria-describedby="rollError rollHint"
+                >
+                <span class="input-icon" aria-hidden="true">🎓</span>
+              </div>
+              <span id="rollHint" class="input-hint">Your registered college roll / student ID</span>
+              <span id="rollError" class="input-error" role="alert" aria-live="polite"></span>
+            </div>
+
+            <!-- Email Address -->
+            <div class="form-group">
+              <label for="inputEmail" class="form-label">
+                Email Address <span class="required-star" aria-hidden="true">*</span>
+              </label>
+              <div class="input-wrapper">
+                <input 
+                  type="email" 
+                  id="inputEmail" 
+                  name="email" 
+                  class="form-input" 
+                  placeholder="e.g. alex@college.edu or name@gmail.com"
+                  autocomplete="email"
+                  required
+                  aria-describedby="emailError emailHint"
+                >
+                <span class="input-icon" aria-hidden="true">✉️</span>
+              </div>
+              <span id="emailHint" class="input-hint">Used for event verification</span>
+              <span id="emailError" class="input-error" role="alert" aria-live="polite"></span>
+            </div>
+
+            <!-- Privacy Notice -->
+            <div class="privacy-notice">
+              <span class="privacy-icon" aria-hidden="true">🔒</span>
+              <p class="privacy-text">
+                Your details will be used only for event participation and result submission.
+              </p>
+            </div>
+
+            <!-- Submit Button -->
+            <button id="btnContinueToQuiz" class="btn btn-primary btn-block btn-lg" type="submit">
+              <span>CONTINUE TO QUIZ</span>
+              <svg class="btn-arrow" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ========================================== -->
+    <!-- SCREEN 3: QUIZ SCREEN                      -->
+    <!-- ========================================== -->
+    <section id="screenQuiz" class="screen" aria-labelledby="quizHeaderInfo" hidden>
+      <div class="container screen-container">
+        
+        <!-- Quiz Top Progress Area -->
+        <div class="quiz-progress-bar-card">
+          <div class="quiz-progress-meta">
+            <span id="questionCounterText" class="counter-badge">Question 1 of 10</span>
+            <span id="progressPercentageText" class="progress-percent">10%</span>
+          </div>
+          <div class="progress-track" role="progressbar" id="quizProgressBar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" aria-label="Quiz progress">
+            <div id="progressFill" class="progress-fill" style="width: 10%;"></div>
+          </div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="card quiz-card">
+          <div class="question-header">
+            <span id="questionCategoryBadge" class="category-tag">Cloud Basics</span>
+            <span class="points-tag">1 Point</span>
+          </div>
+
+          <h2 id="questionText" class="question-title">
+            <!-- Question text loaded dynamically -->
+          </h2>
+
+          <fieldset class="options-fieldset">
+            <legend class="visually-hidden">Choose one answer option</legend>
+            <div id="optionsContainer" class="options-container" role="radiogroup" aria-labelledby="questionText">
+              <!-- Options loaded dynamically -->
+            </div>
+          </fieldset>
+
+          <div id="quizValidationWarning" class="quiz-warning" role="alert" aria-live="polite" hidden>
+            ⚠️ Please select an answer before continuing.
+          </div>
+
+          <div class="quiz-footer-actions">
+            <button id="btnNextQuestion" class="btn btn-primary btn-block btn-lg" type="button" disabled>
+              <span id="btnNextText">NEXT QUESTION</span>
+              <svg class="btn-arrow" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="quiz-bottom-tip">
+          <span>💡 Tap any option to select. You can switch your choice anytime before tapping Next.</span>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ========================================== -->
+    <!-- SCREEN 4: RESULT SCREEN                    -->
+    <!-- ========================================== -->
+    <section id="screenResult" class="screen" aria-labelledby="resultCardHeading" hidden>
+      <div class="container screen-container">
+        
+        <!-- Screenshot Reminder Alert Banner -->
+        <div class="screenshot-alert-banner" role="status">
+          <div class="alert-icon" aria-hidden="true">📸</div>
+          <div class="alert-body">
+            <strong class="alert-title">TAKE A SCREENSHOT OF THIS RESULT</strong>
+            <p class="alert-desc">
+              Capture this result card now on your phone screen. You will upload this screenshot in the event submission form!
+            </p>
+          </div>
+        </div>
+
+        <!-- ======================================== -->
+        <!-- DIGITAL RESULT CARD (Screenshot-Optimized) -->
+        <!-- ======================================== -->
+        <div id="resultCard" class="card result-card">
+          <!-- Card Decorative Corner Accents -->
+          <div class="card-corner card-corner-tl" aria-hidden="true"></div>
+          <div class="card-corner card-corner-tr" aria-hidden="true"></div>
+          <div class="card-corner card-corner-bl" aria-hidden="true"></div>
+          <div class="card-corner card-corner-br" aria-hidden="true"></div>
+
+          <!-- Result Card Header -->
+          <div class="result-card-header">
+            <div class="result-brand-row">
+              <div class="result-brand-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="card-cloud-icon" aria-hidden="true">
+                  <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
+                </svg>
+                <span>AWS BUILDER CHALLENGE</span>
+              </div>
+              <div id="resultIdDisplay" class="result-id-badge">
+                Result ID: <strong id="resResultId">AWS-BC-7F42</strong>
+              </div>
+            </div>
+            <p class="result-event-tag">AWS Builder Center Tabling Event</p>
+          </div>
+
+          <!-- Completion Banner -->
+          <div class="challenge-complete-header">
+            <span class="trophy-emoji" aria-hidden="true">🎯</span>
+            <h2 id="resultCardHeading" class="challenge-complete-text">CHALLENGE COMPLETE</h2>
+          </div>
+
+          <!-- Participant Info Box -->
+          <div class="participant-summary-box">
+            <div class="participant-name-block">
+              <span class="sub-label">Participant</span>
+              <strong id="resParticipantName" class="participant-name-text">Alex Johnson</strong>
+            </div>
+            <div class="participant-meta-block">
+              <div class="meta-row">
+                <span class="sub-label">Roll Number:</span>
+                <span id="resRollNumber" class="meta-val">21BCSE102</span>
+              </div>
+              <div class="meta-row">
+                <span class="sub-label">Email:</span>
+                <span id="resEmail" class="meta-val">alex@college.edu</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Score Card Section -->
+          <div class="score-display-card">
+            <div class="score-primary-block">
+              <span class="score-title">YOUR SCORE</span>
+              <div class="score-fraction">
+                <span id="resScoreValue" class="score-number">8</span>
+                <span class="score-divider">/</span>
+                <span class="score-total">10</span>
+              </div>
+            </div>
+            <div class="score-percentage-block">
+              <span class="percentage-title">Accuracy</span>
+              <span id="resPercentageValue" class="percentage-value">80%</span>
+            </div>
+          </div>
+
+          <!-- Result Category Box -->
+          <div id="categoryContainer" class="category-result-card">
+            <div class="category-header">
+              <span id="resCategoryIcon" class="category-icon" aria-hidden="true">⚡</span>
+              <div class="category-text-wrap">
+                <span class="category-meta-label">Event Category</span>
+                <h3 id="resCategoryTitle" class="category-title">Cloud Builder</h3>
+              </div>
+            </div>
+            <p id="resCategoryMessage" class="category-description">
+              Great job! You already have a good understanding of cloud basics.
+            </p>
+          </div>
+
+          <!-- Verification Stamp Footer -->
+          <div class="result-card-footer">
+            <div class="verification-meta">
+              <span class="verify-icon" aria-hidden="true">🛡️</span>
+              <span class="verify-text">Verified Event Activity Challenge</span>
+            </div>
+            <div class="verification-date">
+              <span id="resTimestampText">Oct 08, 2026</span>
+            </div>
+            <div class="organizer-footer-sign">
+              Organized by Aman Kumar • AWS Student Builder Campus Leader
+            </div>
+          </div>
+        </div>
+
+        <!-- Result Card Action: Download Card -->
+        <div class="card-action-bar">
+          <button id="btnDownloadResult" class="btn btn-secondary btn-block" type="button">
+            <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+            <span>DOWNLOAD RESULT CARD (IMAGE)</span>
+          </button>
+          <p class="download-tip">
+            💡 Or take a standard screenshot on your phone (Volume Down + Power Button).
+          </p>
+        </div>
+
+
+        <!-- ========================================== -->
+        <!-- FINAL STEP: SUBMIT FORM & JOIN AWS         -->
+        <!-- ========================================== -->
+        <div class="card final-step-card">
+          <div class="final-step-badge">
+            <span class="badge-icon" aria-hidden="true">🚀</span>
+            <span>NEXT ACTION</span>
+          </div>
+
+          <h3 class="final-step-title">FINAL STEP</h3>
+          <p class="final-step-subtitle">To complete your event participation:</p>
+
+          <ol class="step-instruction-list">
+            <li class="instruction-item">
+              <span class="step-num">1</span>
+              <div class="step-detail">
+                <strong>Take a screenshot</strong> of your quiz result card above (or tap Download Result Card).
+              </div>
+            </li>
+            <li class="instruction-item">
+              <span class="step-num">2</span>
+              <div class="step-detail">
+                <strong>Open the Google Form</strong> using the button below.
+              </div>
+            </li>
+            <li class="instruction-item">
+              <span class="step-num">3</span>
+              <div class="step-detail">
+                <strong>Upload your quiz result screenshot</strong> into the form.
+              </div>
+            </li>
+            <li class="instruction-item">
+              <span class="step-num">4</span>
+              <div class="step-detail">
+                <strong>Upload your AWS Builder Center profile screenshot</strong> into the form.
+              </div>
+            </li>
+            <li class="instruction-item">
+              <span class="step-num">5</span>
+              <div class="step-detail">
+                <strong>Submit the form</strong> to record your tabling event attendance!
+              </div>
+            </li>
+          </ol>
+
+          <div class="final-cta-wrapper">
+            <a id="linkGoogleForm" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-block btn-lg btn-glow">
+              <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
+                <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>
+              </svg>
+              <span>SUBMIT PARTICIPATION FORM</span>
+            </a>
+          </div>
+        </div>
+
+
+        <!-- AWS BUILDER CENTER PROMOTION CARD -->
+        <div class="card builder-center-card">
+          <div class="builder-center-header">
+            <div class="builder-icon-box" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="m10 15 5-3-5-3v6Z"/>
+              </svg>
+            </div>
+            <div class="builder-text">
+              <h4 class="builder-title">Join AWS Builder Center</h4>
+              <p class="builder-desc">
+                Explore hands-on cloud tutorials, builder communities, and student learning paths.
+              </p>
+            </div>
+          </div>
+
+          <a id="linkAwsBuilderCenter" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
+            <span>JOIN AWS BUILDER CENTER</span>
+            <svg class="btn-arrow" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
+              <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>
+            </svg>
+          </a>
+        </div>
+
+
+        <!-- RETAKE QUIZ OPTION -->
+        <div class="retake-container">
+          <button id="btnRetakeQuiz" class="btn btn-ghost" type="button">
+            <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+            </svg>
+            <span>TAKE QUIZ AGAIN</span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-container">
+      <div class="footer-event-info">
+        <strong>AWS Builder Challenge</strong> • College Event
+      </div>
+      <div class="footer-organizer">
+        Organized by <strong>Aman Kumar</strong>, AWS Student Builder Campus Leader
+      </div>
+      <div class="footer-disclaimer">
+        This is a student-organized event activity and is not an official AWS certification exam.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Hidden Canvas for Offline Image Card Generation -->
+  <canvas id="exportCanvas" style="display:none;" width="1200" height="720"></canvas>
+
+  <script src="script.js"></script>
+</body>
+</html>
