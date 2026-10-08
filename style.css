@@ -796,6 +796,38 @@ body {
   margin-bottom: 1.5rem;
 }
 
+.question-code-block {
+  background: #080d19;
+  border: 1px solid #23344d;
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  margin: 0.85rem 0 0.5rem 0;
+  font-family: var(--font-mono);
+  font-size: 0.92rem;
+  color: #38bdf8;
+  line-height: 1.45;
+  text-align: left;
+  overflow-x: auto;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.question-code-block code {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  white-space: pre;
+}
+
+.inline-code {
+  background: #080d19;
+  border: 1px solid #23344d;
+  border-radius: 4px;
+  padding: 0.15rem 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  color: #38bdf8;
+}
+
 .options-fieldset {
   border: none;
   padding: 0;
@@ -1469,9 +1501,46 @@ body {
   line-height: 1.35;
 }
 
-.retake-container {
-  text-align: center;
-  padding-block: 0.5rem 1rem;
+/* Single Attempt Recorded Notice */
+.attempt-notice-card {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 153, 0, 0.35);
+  border-radius: var(--radius-md);
+  padding: 1.15rem 1.25rem;
+  margin-top: 0.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  text-align: left;
+}
+
+.attempt-notice-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.45rem;
+}
+
+.notice-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.notice-badge {
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--aws-orange);
+}
+
+.notice-text {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.notice-text strong {
+  color: var(--text-main);
 }
 
 /* Footer */

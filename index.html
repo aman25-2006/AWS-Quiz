@@ -8,7 +8,7 @@
   <title>AWS Builder Challenge | Tabling Event Quiz</title>
   
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <link rel="stylesheet" href="style.css?v=2.2">
+  <link rel="stylesheet" href="style.css?v=3.0">
 </head>
 <body>
   <!-- Background Glow & Grid Elements -->
@@ -495,14 +495,15 @@
         </div>
 
 
-        <!-- RETAKE QUIZ OPTION -->
-        <div class="retake-container">
-          <button id="btnRetakeQuiz" class="btn btn-ghost" type="button">
-            <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
-            </svg>
-            <span>TAKE QUIZ AGAIN</span>
-          </button>
+        <!-- ATTEMPT COMPLETED NOTICE (SINGLE ATTEMPT RULE) -->
+        <div class="card attempt-notice-card" id="attemptNoticeCard">
+          <div class="attempt-notice-header">
+            <span class="notice-icon" aria-hidden="true">🔒</span>
+            <span class="notice-badge">SINGLE ATTEMPT RECORDED</span>
+          </div>
+          <p class="notice-text">
+            Your official challenge result has been locked. Each participant is granted <strong>one official attempt</strong> for tabling event verification. Please upload your screenshot using the form link above.
+          </p>
         </div>
 
       </div>
@@ -528,6 +529,6 @@
   <!-- Hidden Canvas for Offline Image Card Generation -->
   <canvas id="exportCanvas" style="display:none;" width="1200" height="720"></canvas>
 
-  <script src="script.js?v=2.2"></script>
+  <script src="script.js?v=3.0"></script>
 </body>
 </html>

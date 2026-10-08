@@ -74,14 +74,33 @@ const CONFIG = {
 
 ---
 
-## 🎲 Question & Option Randomization (Anti-Cheating)
+## 🎲 60-Question Bank & Balanced Selection (Anti-Cheating)
 
-The quiz employs a **true Fisher-Yates (Knuth) shuffle algorithm**:
-1. When a student enters the quiz, all 10 questions are shuffled in memory.
-2. The 4 answer options for each question are also independently shuffled.
-3. If two students sit next to each other, their Question 1 and answer order will almost certainly differ.
-4. Correct answers are linked by stable IDs (`correctAnswerId`), ensuring 100% evaluation accuracy regardless of position.
-5. If the user clicks **TAKE QUIZ AGAIN**, a fresh random sequence is generated.
+The quiz features a permanent bank of **60 BCA-level technical questions** spanning 5 core domains:
+1. **AWS & Cloud Computing** (~15 questions): EC2, S3, RDS, Lambda, VPC, IAM, Regions & AZs, Elasticity, Shared Responsibility, Cloud Economics.
+2. **Computer Science & Programming** (~15 questions): Python mental code output, time complexity, list slicing, pointers, recursion, OOP inheritance & encapsulation.
+3. **Web, Database & Networking** (~15 questions): SQL indexing, Foreign keys, DROP vs TRUNCATE, Normalization, DNS, HTTP/HTTPS, REST, DOM, TCP vs UDP.
+4. **Cybersecurity, AI & General Tech** (~10 questions): Phishing, AuthN vs AuthZ, Password hashing, LLMs, Supervised learning, OS roles, MFA, RAM vs SSD, DDoS.
+5. **Light Logical / CS IQ** (~5 questions): Binary conversion, bitwise operations, linear algorithm scaling, logic gates.
+
+### ⚖️ Balanced Selection per Participant
+When a student begins, the app randomly draws **10 balanced questions**:
+- **3 AWS & Cloud questions**
+- **3 Programming questions**
+- **2 Web / Database / Networking questions**
+- **1 Cybersecurity / AI question**
+- **1 Logical / CS IQ question**
+
+Both the question sequence and all 4 options per question are independently shuffled using the unbiased **Fisher-Yates algorithm**. Correct answers are securely matched using stable IDs (`correctAnswerId`).
+
+---
+
+## 🔒 Strict Single-Attempt Rule (Tabling Event Integrity)
+
+To maintain fair competition during physical tabling events:
+- **One Attempt Only**: Participants are allowed strictly 1 official attempt per browser session.
+- **Session Locking**: On quiz completion, the score and participant record are permanently locked in `sessionStorage`.
+- **No Retakes**: All "Take Quiz Again" restart buttons have been removed. If a user refreshes or revisits the page, their locked digital result card is displayed immediately with a reminder to submit their screenshot to the Participation Form.
 
 ---
 
@@ -89,7 +108,8 @@ The quiz employs a **true Fisher-Yates (Knuth) shuffle algorithm**:
 
 - The timer starts strictly when the participant begins Question 1 (ignoring time spent on the details form).
 - Timer freezes immediately upon submission using high-precision `performance.now()`.
-- Displayed clearly on the Result Card and on the downloadable Result Image.
+- Displayed clearly on the Result Card and on the downloadable Result Image: exact format `MM:SS` (e.g. `01:42`) and descriptive `(1m 42s)`.
+- Actual completion timestamp with seconds (e.g. `Oct 08, 2026 • 02:14:38 PM`) is stamped on both the card and downloaded image.
 - Small neutral organizer note: *"Score is the primary result. If scores are tied, completion time may be used as a tie-breaker by the event organizer."*
 
 ---
@@ -100,10 +120,10 @@ The quiz automatically assigns one of four encouraging event categories:
 
 | Score | Category | Encouraging Note |
 | :--- | :--- | :--- |
-| **9 – 10** | **AWS Builder Pro** | *Excellent! You have a strong foundation in AWS and cloud concepts.* |
-| **7 – 8** | **Cloud Builder** | *Great job! You already have a good understanding of cloud basics.* |
-| **5 – 6** | **Cloud Explorer** | *Good start! Keep exploring AWS and cloud technologies.* |
-| **0 – 4** | **Getting Started** | *Every builder starts somewhere. Keep learning and building!* |
+| **9 – 10** | **AWS Builder Pro** | *Outstanding! You demonstrated an advanced technical foundation across cloud and core computing concepts.* |
+| **7 – 8** | **Cloud Builder** | *Great job! You have a solid grasp of cloud infrastructure, programming, and web technologies.* |
+| **5 – 6** | **Cloud Explorer** | *Good effort! You understand essential fundamentals. Keep building and exploring AWS tools.* |
+| **0 – 4** | **Getting Started** | *Every great engineer starts somewhere. Keep learning, practicing, and building!* |
 
 > *Note: These are fun event participation titles and are explicitly not official AWS certifications.*
 
