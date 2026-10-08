@@ -222,6 +222,11 @@
         <div class="quiz-progress-bar-card">
           <div class="quiz-progress-meta">
             <span id="questionCounterText" class="counter-badge">Question 1 of 10</span>
+            <div class="quiz-timer-badge" id="quizTimerBadge" title="Quiz elapsed time">
+              <span class="timer-icon" aria-hidden="true">⏱️</span>
+              <span class="timer-label">Time:</span>
+              <span id="quizTimerDisplay" class="timer-value">00:00</span>
+            </div>
             <span id="progressPercentageText" class="progress-percent">10%</span>
           </div>
           <div class="progress-track" role="progressbar" id="quizProgressBar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" aria-label="Quiz progress">
@@ -278,9 +283,9 @@
         <div class="screenshot-alert-banner" role="status">
           <div class="alert-icon" aria-hidden="true">📸</div>
           <div class="alert-body">
-            <strong class="alert-title">TAKE A SCREENSHOT OF THIS RESULT</strong>
+            <strong class="alert-title">YOUR QUIZ RESULT IS NOW READY</strong>
             <p class="alert-desc">
-              Capture this result card now on your phone screen. You will upload this screenshot in the event submission form!
+              <strong>Take a screenshot of this result before continuing.</strong> You will need to upload this screenshot in the Participation Form.
             </p>
           </div>
         </div>
@@ -349,6 +354,16 @@
               <span class="percentage-title">Accuracy</span>
               <span id="resPercentageValue" class="percentage-value">80%</span>
             </div>
+            <div class="score-time-block">
+              <span class="time-title">TIME TAKEN</span>
+              <span id="resTimeValue" class="time-value">00:00</span>
+            </div>
+          </div>
+
+          <!-- Tie-breaker Note -->
+          <div class="tie-breaker-note">
+            <span class="tie-icon" aria-hidden="true">⏱️</span>
+            <span>Score is the primary result. If scores are tied, completion time may be used as a tie-breaker by the event organizer.</span>
           </div>
 
           <!-- Result Category Box -->
@@ -410,25 +425,25 @@
             <li class="instruction-item">
               <span class="step-num">1</span>
               <div class="step-detail">
-                <strong>Take a screenshot</strong> of your quiz result card above (or tap Download Result Card).
+                <strong>Take a screenshot</strong> of your quiz result.
               </div>
             </li>
             <li class="instruction-item">
               <span class="step-num">2</span>
               <div class="step-detail">
-                <strong>Open the Google Form</strong> using the button below.
+                <strong>Open the Participation Form</strong> using the button below.
               </div>
             </li>
             <li class="instruction-item">
               <span class="step-num">3</span>
               <div class="step-detail">
-                <strong>Upload your quiz result screenshot</strong> into the form.
+                <strong>Upload your Quiz Result Screenshot</strong> into the form.
               </div>
             </li>
             <li class="instruction-item">
               <span class="step-num">4</span>
               <div class="step-detail">
-                <strong>Upload your AWS Builder Center profile screenshot</strong> into the form.
+                <strong>Upload your AWS Builder Center Profile Screenshot</strong> into the form.
               </div>
             </li>
             <li class="instruction-item">
@@ -440,7 +455,7 @@
           </ol>
 
           <div class="final-cta-wrapper">
-            <a id="linkGoogleForm" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-block btn-lg btn-glow">
+            <a id="linkGoogleForm" href="https://forms.gle/wGGXvvW8SRhWueuV8" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-block btn-lg btn-glow">
               <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                 <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
                 <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>

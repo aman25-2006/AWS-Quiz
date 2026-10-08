@@ -7,145 +7,180 @@
 // =============================================================================
 // 1. CONFIGURATION (EASILY EDITABLE FOR THE ORGANIZER)
 // =============================================================================
-// Replace the two placeholder URLs below with your actual links before the event:
 const CONFIG = {
-  // PASTE YOUR ACTUAL GOOGLE FORM LINK HERE:
-  GOOGLE_FORM_URL: "PASTE_GOOGLE_FORM_URL_HERE",
+  // Official Event Google Form Link for Screenshot Submission:
+  GOOGLE_FORM_URL: "https://forms.gle/wGGXvvW8SRhWueuV8",
 
-  // PASTE YOUR ACTUAL AWS BUILDER CENTER LINK HERE (default points to AWS Builder Center portal):
-  AWS_BUILDER_CENTER_URL: "PASTE_AWS_BUILDER_CENTER_URL_HERE"
+  // AWS Builder Center Portal Link:
+  AWS_BUILDER_CENTER_URL: "https://builder.aws.amazon.com/"
 };
 
 
 // =============================================================================
-// 2. QUIZ QUESTIONS REPOSITORY (10 BEGINNER-FRIENDLY AWS / CLOUD QUESTIONS)
+// 2. MASTER QUESTIONS REPOSITORY (10 BEGINNER-FRIENDLY AWS / CLOUD QUESTIONS)
+// Each question has a unique ID, stable option IDs, and a correctAnswerId.
+// Questions and their options are dynamically shuffled using Fisher-Yates on every attempt.
 // =============================================================================
-const QUIZ_QUESTIONS = [
+const MASTER_QUESTIONS = [
   {
-    id: 1,
+    id: "q_cloud_computing",
     category: "Cloud Basics",
     question: "What is cloud computing?",
     options: [
-      "On-demand delivery of IT resources over the internet with pay-as-you-go pricing",
-      "A weather forecasting software used by meteorologists",
-      "Installing physical servers in your college dormitory room",
-      "A local backup copy stored on a personal USB flash drive"
+      { id: "cc_opt_correct", text: "On-demand delivery of IT resources over the internet with pay-as-you-go pricing" },
+      { id: "cc_opt_weather", text: "A weather forecasting software used by meteorologists" },
+      { id: "cc_opt_dorm", text: "Installing physical servers in your college dormitory room" },
+      { id: "cc_opt_usb", text: "A local backup copy stored on a personal USB flash drive" }
     ],
-    correctIndex: 0
+    correctAnswerId: "cc_opt_correct"
   },
   {
-    id: 2,
+    id: "q_aws_overview",
     category: "AWS Basics",
     question: "What is Amazon Web Services (AWS)?",
     options: [
-      "An online marketplace for buying computer monitors",
-      "A comprehensive, evolving cloud computing platform provided by Amazon",
-      "An operating system installed exclusively on MacBooks",
-      "A home broadband internet connection service"
+      { id: "aws_opt_monitor", text: "An online marketplace for buying computer monitors" },
+      { id: "aws_opt_correct", text: "A comprehensive, evolving cloud computing platform provided by Amazon" },
+      { id: "aws_opt_mac", text: "An operating system installed exclusively on MacBooks" },
+      { id: "aws_opt_isp", text: "A home broadband internet connection service" }
     ],
-    correctIndex: 1
+    correctAnswerId: "aws_opt_correct"
   },
   {
-    id: 3,
+    id: "q_ec2_compute",
     category: "Compute",
     question: "What is Amazon EC2 primarily used for?",
     options: [
-      "Streaming movies and music to mobile devices",
-      "Reserving physical website domain names on the internet",
-      "Providing secure, resizable compute capacity (virtual servers) in the cloud",
-      "Scanning paper documents into PDF format"
+      { id: "ec2_opt_stream", text: "Streaming movies and music to mobile devices" },
+      { id: "ec2_opt_domain", text: "Reserving physical website domain names on the internet" },
+      { id: "ec2_opt_correct", text: "Providing secure, resizable compute capacity (virtual servers) in the cloud" },
+      { id: "ec2_opt_scan", text: "Scanning paper documents into PDF format" }
     ],
-    correctIndex: 2
+    correctAnswerId: "ec2_opt_correct"
   },
   {
-    id: 4,
+    id: "q_s3_storage",
     category: "Storage",
     question: "What is Amazon Simple Storage Service (Amazon S3)?",
     options: [
-      "An object storage service that offers industry-leading scalability, data availability, and security",
-      "A local graphics card driver update tool",
-      "A relational database engine designed for banking transactions",
-      "A programming language developed for microcontrollers"
+      { id: "s3_opt_correct", text: "An object storage service that offers industry-leading scalability, data availability, and security" },
+      { id: "s3_opt_gpu", text: "A local graphics card driver update tool" },
+      { id: "s3_opt_bank", text: "A relational database engine designed for banking transactions" },
+      { id: "s3_opt_micro", text: "A programming language developed for microcontrollers" }
     ],
-    correctIndex: 0
+    correctAnswerId: "s3_opt_correct"
   },
   {
-    id: 5,
+    id: "q_lambda_serverless",
     category: "Serverless",
     question: "What is AWS Lambda?",
     options: [
-      "A physical warehouse for storing Amazon retail packages",
-      "A serverless compute service that runs code in response to events without managing servers",
-      "A web browser designed for testing cloud applications",
-      "A desktop antivirus software application"
+      { id: "lmb_opt_retail", text: "A physical warehouse for storing Amazon retail packages" },
+      { id: "lmb_opt_correct", text: "A serverless compute service that runs code in response to events without managing servers" },
+      { id: "lmb_opt_browser", text: "A web browser designed for testing cloud applications" },
+      { id: "lmb_opt_av", text: "A desktop antivirus software application" }
     ],
-    correctIndex: 1
+    correctAnswerId: "lmb_opt_correct"
   },
   {
-    id: 6,
+    id: "q_region_infra",
     category: "Global Infrastructure",
     question: "What is an AWS Region?",
     options: [
-      "A physical location around the world where AWS clusters data centers",
-      "A single computer rack located in a local university computer lab",
-      "A postal zip code used for package delivery tracking",
-      "The time zone configured inside a computer operating system clock"
+      { id: "reg_opt_correct", text: "A physical location around the world where AWS clusters data centers" },
+      { id: "reg_opt_lab", text: "A single computer rack located in a local university computer lab" },
+      { id: "reg_opt_zip", text: "A postal zip code used for package delivery tracking" },
+      { id: "reg_opt_clock", text: "The time zone configured inside a computer operating system clock" }
     ],
-    correctIndex: 0
+    correctAnswerId: "reg_opt_correct"
   },
   {
-    id: 7,
+    id: "q_az_infra",
     category: "Global Infrastructure",
     question: "What is an AWS Availability Zone (AZ)?",
     options: [
-      "A country-wide network firewall rule",
-      "One or more discrete data centers with redundant power, networking, and connectivity within a Region",
-      "A mobile network tower located on a national highway",
-      "A specific user profile on the AWS management console"
+      { id: "az_opt_firewall", text: "A country-wide network firewall rule" },
+      { id: "az_opt_correct", text: "One or more discrete data centers with redundant power, networking, and connectivity within a Region" },
+      { id: "az_opt_tower", text: "A mobile network tower located on a national highway" },
+      { id: "az_opt_profile", text: "A specific user profile on the AWS management console" }
     ],
-    correctIndex: 1
+    correctAnswerId: "az_opt_correct"
   },
   {
-    id: 8,
+    id: "q_rds_database",
     category: "Databases",
     question: "What is Amazon Relational Database Service (Amazon RDS)?",
     options: [
-      "A web design template for mobile responsive apps",
-      "A managed service that makes it easy to set up, operate, and scale relational databases in the cloud",
-      "A multimedia tool for editing audio and video clips",
-      "An email marketing tool for broadcasting weekly newsletters"
+      { id: "rds_opt_template", text: "A web design template for mobile responsive apps" },
+      { id: "rds_opt_correct", text: "A managed service that makes it easy to set up, operate, and scale relational databases in the cloud" },
+      { id: "rds_opt_video", text: "A multimedia tool for editing audio and video clips" },
+      { id: "rds_opt_newsletter", text: "An email marketing tool for broadcasting weekly newsletters" }
     ],
-    correctIndex: 1
+    correctAnswerId: "rds_opt_correct"
   },
   {
-    id: 9,
+    id: "q_iam_security",
     category: "Security & IAM",
     question: "What is AWS Identity and Access Management (IAM) used for?",
     options: [
-      "Ordering laptop hardware for enterprise staff members",
-      "Securely managing identities, permissions, and access to AWS services and resources",
-      "Compressing image files to save hard drive space",
-      "Generating temporary fake email addresses for testing forms"
+      { id: "iam_opt_hardware", text: "Ordering laptop hardware for enterprise staff members" },
+      { id: "iam_opt_correct", text: "Securely managing identities, permissions, and access to AWS services and resources" },
+      { id: "iam_opt_compress", text: "Compressing image files to save hard drive space" },
+      { id: "iam_opt_fake", text: "Generating temporary fake email addresses for testing forms" }
     ],
-    correctIndex: 1
+    correctAnswerId: "iam_opt_correct"
   },
   {
-    id: 10,
+    id: "q_object_storage_service",
     category: "Storage",
     question: "Which AWS service is commonly used for storing files, media assets, and backups as objects?",
     options: [
-      "Amazon S3 (Simple Storage Service)",
-      "Amazon Route 53",
-      "Amazon Simple Notification Service (SNS)",
-      "AWS Direct Connect"
+      { id: "obj_opt_s3_correct", text: "Amazon S3 (Simple Storage Service)" },
+      { id: "obj_opt_route53", text: "Amazon Route 53" },
+      { id: "obj_opt_sns", text: "Amazon Simple Notification Service (SNS)" },
+      { id: "obj_opt_direct", text: "AWS Direct Connect" }
     ],
-    correctIndex: 0
+    correctAnswerId: "obj_opt_s3_correct"
   }
 ];
 
 
 // =============================================================================
-// 3. APPLICATION STATE
+// 3. TRUE UNBIASED RANDOMIZATION (FISHER-YATES SHUFFLE)
+// =============================================================================
+
+/**
+ * Standard Fisher-Yates (Knuth) Shuffle algorithm.
+ * Guarantees uniform, unbiased permutations without mutating original array.
+ */
+function fisherYatesShuffle(array) {
+  const result = [...array];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = result[i];
+    result[i] = result[j];
+    result[j] = temp;
+  }
+  return result;
+}
+
+/**
+ * Generates a completely new randomized quiz session:
+ * 1. Randomizes the complete question order across all 10 questions.
+ * 2. Independently randomizes the 4 answer choices for each question.
+ * Correct answers remain reliably matched via stable correctAnswerId.
+ */
+function createRandomizedQuizSession() {
+  const shuffledQuestions = fisherYatesShuffle(MASTER_QUESTIONS);
+  return shuffledQuestions.map((q) => ({
+    ...q,
+    options: fisherYatesShuffle(q.options)
+  }));
+}
+
+
+// =============================================================================
+// 4. APPLICATION STATE & ACCURATE TIMER
 // =============================================================================
 const state = {
   currentScreen: "welcome", // 'welcome' | 'details' | 'quiz' | 'result'
@@ -154,15 +189,86 @@ const state = {
     rollNumber: "",
     email: ""
   },
+  activeQuestions: [], // Shuffled on each quiz attempt
   currentQuestionIndex: 0,
-  selectedAnswers: new Array(QUIZ_QUESTIONS.length).fill(null),
-  quizResult: null, // { score, percentage, category, message, resultId, timestamp }
+  selectedAnswerIds: [], // Stores selected option ID for each question
+  quizResult: null, // { score, total, percentage, timeSeconds, timeFormatted, category, resultId, timestamp }
   isSubmitting: false
 };
 
+// Accurate Timer Tracking variables
+let quizStartTime = null;
+let timerInterval = null;
+let finalElapsedMs = 0;
+
+/**
+ * High-precision timestamp with safe fallback
+ */
+function getTimestamp() {
+  return (typeof performance !== "undefined" && performance.now) 
+    ? performance.now() 
+    : Date.now();
+}
+
+/**
+ * Start quiz timer when participant actually enters the first quiz question
+ */
+function startQuizTimer() {
+  stopQuizTimer(); // Ensure any previous interval is cleared
+  quizStartTime = getTimestamp();
+  finalElapsedMs = 0;
+  updateTimerDisplay(0);
+
+  // Update timer display smoothly
+  timerInterval = setInterval(() => {
+    if (quizStartTime === null) return;
+    const now = getTimestamp();
+    const elapsedMs = Math.max(0, now - quizStartTime);
+    const elapsedSeconds = Math.floor(elapsedMs / 1000);
+    updateTimerDisplay(elapsedSeconds);
+  }, 500);
+}
+
+/**
+ * Stop quiz timer immediately upon quiz submission and freeze time
+ */
+function stopQuizTimer() {
+  if (timerInterval !== null) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+  if (quizStartTime !== null) {
+    const now = getTimestamp();
+    finalElapsedMs = Math.max(0, now - quizStartTime);
+  }
+}
+
+/**
+ * Format elapsed seconds into standard MM:SS string
+ * Guarantees no NaN, Infinity, or undefined
+ */
+function formatTime(totalSeconds) {
+  if (isNaN(totalSeconds) || !isFinite(totalSeconds) || totalSeconds < 0) {
+    return "00:00";
+  }
+  const mins = Math.floor(totalSeconds / 60);
+  const secs = totalSeconds % 60;
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${pad(mins)}:${pad(secs)}`;
+}
+
+/**
+ * Update the subtle header timer element in the quiz UI
+ */
+function updateTimerDisplay(totalSeconds) {
+  if (DOM.quizTimerDisplay) {
+    DOM.quizTimerDisplay.textContent = formatTime(totalSeconds);
+  }
+}
+
 
 // =============================================================================
-// 4. DOM ELEMENTS CACHE
+// 5. DOM ELEMENTS CACHE
 // =============================================================================
 const DOM = {
   // Screens
@@ -187,9 +293,10 @@ const DOM = {
   emailError: document.getElementById("emailError"),
   btnContinueToQuiz: document.getElementById("btnContinueToQuiz"),
 
-  // Quiz Screen
+  // Quiz Screen & Timer
   questionCounterText: document.getElementById("questionCounterText"),
   progressPercentageText: document.getElementById("progressPercentageText"),
+  quizTimerDisplay: document.getElementById("quizTimerDisplay"),
   quizProgressBar: document.getElementById("quizProgressBar"),
   progressFill: document.getElementById("progressFill"),
   questionCategoryBadge: document.getElementById("questionCategoryBadge"),
@@ -207,6 +314,7 @@ const DOM = {
   resEmail: document.getElementById("resEmail"),
   resScoreValue: document.getElementById("resScoreValue"),
   resPercentageValue: document.getElementById("resPercentageValue"),
+  resTimeValue: document.getElementById("resTimeValue"),
   categoryContainer: document.getElementById("categoryContainer"),
   resCategoryIcon: document.getElementById("resCategoryIcon"),
   resCategoryTitle: document.getElementById("resCategoryTitle"),
@@ -223,7 +331,7 @@ const DOM = {
 
 
 // =============================================================================
-// 5. HELPER FUNCTIONS
+// 6. HELPER FUNCTIONS
 // =============================================================================
 
 /**
@@ -234,8 +342,7 @@ function showScreen(screenKey) {
     const screenEl = DOM.screens[key];
     if (key === screenKey) {
       screenEl.hidden = false;
-      // Trigger reflow for CSS opacity animation
-      void screenEl.offsetWidth;
+      void screenEl.offsetWidth; // Trigger reflow for CSS opacity animation
       screenEl.classList.add("screen-active");
     } else {
       screenEl.classList.remove("screen-active");
@@ -252,7 +359,7 @@ function showScreen(screenKey) {
  * e.g., "AWS-BC-7F42"
  */
 function generateResultId() {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // Clean readable chars without confusion
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // Clean readable chars
   let code = "";
   for (let i = 0; i < 4; i++) {
     code += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -305,7 +412,7 @@ function isValidEmail(email) {
 
 
 // =============================================================================
-// 6. FORM VALIDATION LOGIC
+// 7. FORM VALIDATION LOGIC
 // =============================================================================
 
 function validateParticipantForm() {
@@ -364,13 +471,13 @@ function clearFieldError(inputEl, errorEl) {
 
 
 // =============================================================================
-// 7. QUIZ RENDER & INTERACTION LOGIC
+// 8. QUIZ RENDER & INTERACTION LOGIC
 // =============================================================================
 
 function renderCurrentQuestion() {
   const qIndex = state.currentQuestionIndex;
-  const total = QUIZ_QUESTIONS.length;
-  const question = QUIZ_QUESTIONS[qIndex];
+  const total = state.activeQuestions.length;
+  const question = state.activeQuestions[qIndex];
 
   // Update progress numbers & bar
   const progressPercent = Math.round(((qIndex + 1) / total) * 100);
@@ -388,10 +495,10 @@ function renderCurrentQuestion() {
 
   // Render Answer Options
   DOM.optionsContainer.innerHTML = "";
-  const selectedAnswer = state.selectedAnswers[qIndex];
+  const selectedOptionId = state.selectedAnswerIds[qIndex];
 
-  question.options.forEach((optText, optIdx) => {
-    const isSelected = selectedAnswer === optIdx;
+  question.options.forEach((opt, optIdx) => {
+    const isSelected = selectedOptionId === opt.id;
     const optionLetter = String.fromCharCode(65 + optIdx); // A, B, C, D
 
     const btn = document.createElement("button");
@@ -399,14 +506,14 @@ function renderCurrentQuestion() {
     btn.className = `option-btn ${isSelected ? "is-selected" : ""}`;
     btn.setAttribute("role", "radio");
     btn.setAttribute("aria-checked", isSelected ? "true" : "false");
-    btn.setAttribute("data-opt-index", optIdx);
+    btn.setAttribute("data-option-id", opt.id);
 
     btn.innerHTML = `
       <span class="option-indicator" aria-hidden="true">${optionLetter}</span>
-      <span class="option-text">${optText}</span>
+      <span class="option-text">${opt.text}</span>
     `;
 
-    btn.addEventListener("click", () => handleSelectOption(optIdx));
+    btn.addEventListener("click", () => handleSelectOption(opt.id));
     DOM.optionsContainer.appendChild(btn);
   });
 
@@ -417,17 +524,17 @@ function renderCurrentQuestion() {
     DOM.btnNextText.textContent = "NEXT QUESTION";
   }
 
-  DOM.btnNextQuestion.disabled = selectedAnswer === null;
+  DOM.btnNextQuestion.disabled = selectedOptionId === null || selectedOptionId === undefined;
 }
 
-function handleSelectOption(optIdx) {
-  state.selectedAnswers[state.currentQuestionIndex] = optIdx;
+function handleSelectOption(optionId) {
+  state.selectedAnswerIds[state.currentQuestionIndex] = optionId;
   DOM.quizValidationWarning.hidden = true;
 
   // Update UI selection highlights
   const allOptionBtns = DOM.optionsContainer.querySelectorAll(".option-btn");
-  allOptionBtns.forEach((btn, index) => {
-    const isSelected = index === optIdx;
+  allOptionBtns.forEach((btn) => {
+    const isSelected = btn.getAttribute("data-option-id") === optionId;
     btn.classList.toggle("is-selected", isSelected);
     btn.setAttribute("aria-checked", isSelected ? "true" : "false");
   });
@@ -437,15 +544,15 @@ function handleSelectOption(optIdx) {
 }
 
 function handleNextOrSubmit() {
-  const currentAnswer = state.selectedAnswers[state.currentQuestionIndex];
+  const currentAnswerId = state.selectedAnswerIds[state.currentQuestionIndex];
   
-  if (currentAnswer === null) {
+  if (!currentAnswerId) {
     DOM.quizValidationWarning.hidden = false;
     return;
   }
 
   // If there are more questions, advance
-  if (state.currentQuestionIndex < QUIZ_QUESTIONS.length - 1) {
+  if (state.currentQuestionIndex < state.activeQuestions.length - 1) {
     state.currentQuestionIndex++;
     renderCurrentQuestion();
     window.scrollTo({ top: 120, behavior: "smooth" });
@@ -457,22 +564,27 @@ function handleNextOrSubmit() {
 
 
 // =============================================================================
-// 8. SCORE CALCULATION & RESULT SCREEN
+// 9. SCORE CALCULATION & RESULT SCREEN
 // =============================================================================
 
 function submitQuiz() {
   if (state.isSubmitting) return;
   state.isSubmitting = true;
 
-  // Automatically calculate score: number of correct answers
+  // 1. Stop and freeze the quiz timer
+  stopQuizTimer();
+  const totalSeconds = Math.max(0, Math.floor(finalElapsedMs / 1000));
+  const timeFormatted = formatTime(totalSeconds);
+
+  // 2. Automatically calculate score comparing selected option ID with correctAnswerId
   let correctCount = 0;
-  QUIZ_QUESTIONS.forEach((q, index) => {
-    if (state.selectedAnswers[index] === q.correctIndex) {
+  state.activeQuestions.forEach((q, index) => {
+    if (state.selectedAnswerIds[index] === q.correctAnswerId) {
       correctCount++;
     }
   });
 
-  const totalQuestions = QUIZ_QUESTIONS.length;
+  const totalQuestions = state.activeQuestions.length;
   const percentage = Math.round((correctCount / totalQuestions) * 100);
   const categoryInfo = calculateResultCategory(correctCount);
   const resultId = generateResultId();
@@ -484,17 +596,19 @@ function submitQuiz() {
     day: "numeric",
     year: "numeric"
   });
-  const timeFormatted = now.toLocaleTimeString("en-US", {
+  const timeOfDayFormatted = now.toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit"
   });
-  const timestampString = `${dateFormatted} • ${timeFormatted}`;
+  const timestampString = `${dateFormatted} • ${timeOfDayFormatted}`;
 
-  // Store in state
+  // Store result in state
   state.quizResult = {
     score: correctCount,
     total: totalQuestions,
     percentage: percentage,
+    timeSeconds: totalSeconds,
+    timeFormatted: timeFormatted,
     category: categoryInfo,
     resultId: resultId,
     timestamp: timestampString
@@ -507,6 +621,7 @@ function submitQuiz() {
   DOM.resEmail.textContent = state.participant.email;
   DOM.resScoreValue.textContent = correctCount;
   DOM.resPercentageValue.textContent = `${percentage}%`;
+  DOM.resTimeValue.textContent = timeFormatted;
   
   DOM.resCategoryIcon.textContent = categoryInfo.icon;
   DOM.resCategoryTitle.textContent = categoryInfo.title;
@@ -516,7 +631,7 @@ function submitQuiz() {
   // Category styling theme
   DOM.categoryContainer.className = `category-result-card ${categoryInfo.themeClass}`;
 
-  // Update External CTA Links with fallback check
+  // Update External CTA Links
   setupCtaLinks();
 
   // Show result screen
@@ -526,53 +641,24 @@ function submitQuiz() {
 
 
 // =============================================================================
-// 9. EXTERNAL CTA LINKS MANAGEMENT
+// 10. EXTERNAL CTA LINKS MANAGEMENT
 // =============================================================================
 
 function setupCtaLinks() {
-  // Google Form Link
-  DOM.linkGoogleForm.onclick = (e) => {
-    if (
-      !CONFIG.GOOGLE_FORM_URL || 
-      CONFIG.GOOGLE_FORM_URL.includes("PASTE_GOOGLE_FORM_URL_HERE")
-    ) {
-      e.preventDefault();
-      alert(
-        "Event Notice:\nThe Google Form link has not been configured yet.\n\nPlease open script.js and update CONFIG.GOOGLE_FORM_URL with your actual form link."
-      );
-      return;
-    }
-  };
-
-  if (CONFIG.GOOGLE_FORM_URL && !CONFIG.GOOGLE_FORM_URL.includes("PASTE_GOOGLE_FORM_URL_HERE")) {
-    DOM.linkGoogleForm.href = CONFIG.GOOGLE_FORM_URL;
-  } else {
-    DOM.linkGoogleForm.href = "#";
-  }
+  // Google Form Link (Exact event link)
+  DOM.linkGoogleForm.href = CONFIG.GOOGLE_FORM_URL;
+  DOM.linkGoogleForm.target = "_blank";
+  DOM.linkGoogleForm.rel = "noopener noreferrer";
 
   // AWS Builder Center Link
-  DOM.linkAwsBuilderCenter.onclick = (e) => {
-    if (
-      !CONFIG.AWS_BUILDER_CENTER_URL || 
-      CONFIG.AWS_BUILDER_CENTER_URL.includes("PASTE_AWS_BUILDER_CENTER_URL_HERE")
-    ) {
-      e.preventDefault();
-      // Default to official AWS Builder Center landing if not customized
-      window.open("https://builder.aws.amazon.com/", "_blank", "noopener,noreferrer");
-      return;
-    }
-  };
-
-  if (CONFIG.AWS_BUILDER_CENTER_URL && !CONFIG.AWS_BUILDER_CENTER_URL.includes("PASTE_AWS_BUILDER_CENTER_URL_HERE")) {
-    DOM.linkAwsBuilderCenter.href = CONFIG.AWS_BUILDER_CENTER_URL;
-  } else {
-    DOM.linkAwsBuilderCenter.href = "https://builder.aws.amazon.com/";
-  }
+  DOM.linkAwsBuilderCenter.href = CONFIG.AWS_BUILDER_CENTER_URL;
+  DOM.linkAwsBuilderCenter.target = "_blank";
+  DOM.linkAwsBuilderCenter.rel = "noopener noreferrer";
 }
 
 
 // =============================================================================
-// 10. DOWNLOAD RESULT CARD (HIGH RESOLUTION CANVAS IMAGE GENERATOR)
+// 11. DOWNLOAD RESULT CARD (HIGH RESOLUTION CANVAS IMAGE GENERATOR)
 // =============================================================================
 
 function downloadResultCardImage() {
@@ -685,11 +771,11 @@ function downloadResultCardImage() {
   ctx.font = "18px 'Courier New', monospace";
   ctx.fillText(state.participant.email, 65, 380);
 
-  // 5. Score Cards (Right Column)
-  const scoreCardX = 640;
+  // 5. Score Cards (Right Column - 3 Columns: Score, Accuracy, Time Taken)
+  const scoreCardX = 570;
   const scoreCardY = 170;
-  const scoreCardW = 495;
-  const scoreCardH = 150;
+  const scoreCardW = 565;
+  const scoreCardH = 145;
 
   ctx.fillStyle = "#080e1a";
   ctx.fillRect(scoreCardX, scoreCardY, scoreCardW, scoreCardH);
@@ -697,37 +783,53 @@ function downloadResultCardImage() {
   ctx.lineWidth = 2;
   ctx.strokeRect(scoreCardX, scoreCardY, scoreCardW, scoreCardH);
 
-  // Left Score Value
+  // Col 1: Score
   ctx.fillStyle = "#64748b";
-  ctx.font = "bold 14px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
-  ctx.fillText("QUIZ SCORE", scoreCardX + 30, scoreCardY + 38);
+  ctx.font = "bold 13px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+  ctx.fillText("SCORE", scoreCardX + 25, scoreCardY + 36);
 
   ctx.fillStyle = "#ff9900";
-  ctx.font = "bold 64px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
-  ctx.fillText(`${state.quizResult.score}`, scoreCardX + 30, scoreCardY + 115);
+  ctx.font = "bold 52px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+  ctx.fillText(`${state.quizResult.score}`, scoreCardX + 25, scoreCardY + 105);
 
   ctx.fillStyle = "#64748b";
-  ctx.font = "bold 32px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
-  ctx.fillText(`/ 10`, scoreCardX + 115, scoreCardY + 115);
+  ctx.font = "bold 26px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+  ctx.fillText(`/ 10`, scoreCardX + 90, scoreCardY + 105);
 
-  // Vertical split inside score card
+  // Divider 1
   ctx.strokeStyle = "#1c2a40";
   ctx.beginPath();
-  ctx.moveTo(scoreCardX + 245, scoreCardY + 20);
-  ctx.lineTo(scoreCardX + 245, scoreCardY + scoreCardH - 20);
+  ctx.moveTo(scoreCardX + 175, scoreCardY + 20);
+  ctx.lineTo(scoreCardX + 175, scoreCardY + scoreCardH - 20);
   ctx.stroke();
 
-  // Right Accuracy Value
+  // Col 2: Accuracy
   ctx.fillStyle = "#64748b";
-  ctx.font = "bold 14px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
-  ctx.fillText("ACCURACY", scoreCardX + 275, scoreCardY + 38);
+  ctx.font = "bold 13px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+  ctx.fillText("ACCURACY", scoreCardX + 195, scoreCardY + 36);
 
   ctx.fillStyle = "#10b981";
-  ctx.font = "bold 60px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
-  ctx.fillText(`${state.quizResult.percentage}%`, scoreCardX + 275, scoreCardY + 115);
+  ctx.font = "bold 52px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+  ctx.fillText(`${state.quizResult.percentage}%`, scoreCardX + 195, scoreCardY + 105);
+
+  // Divider 2
+  ctx.strokeStyle = "#1c2a40";
+  ctx.beginPath();
+  ctx.moveTo(scoreCardX + 355, scoreCardY + 20);
+  ctx.lineTo(scoreCardX + 355, scoreCardY + scoreCardH - 20);
+  ctx.stroke();
+
+  // Col 3: Time Taken
+  ctx.fillStyle = "#64748b";
+  ctx.font = "bold 13px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+  ctx.fillText("TIME TAKEN", scoreCardX + 375, scoreCardY + 36);
+
+  ctx.fillStyle = "#38bdf8";
+  ctx.font = "bold 44px 'Courier New', monospace";
+  ctx.fillText(`${state.quizResult.timeFormatted}`, scoreCardX + 375, scoreCardY + 105);
 
   // 6. Category Banner
-  const catBoxY = 345;
+  const catBoxY = 335;
   ctx.fillStyle = "#16233a";
   ctx.fillRect(scoreCardX, catBoxY, scoreCardW, 115);
   ctx.strokeStyle = "#ff9900";
@@ -760,7 +862,7 @@ function downloadResultCardImage() {
 
   ctx.fillStyle = "#64748b";
   ctx.font = "13px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
-  ctx.fillText(`Timestamp: ${state.quizResult.timestamp}`, 65, 655);
+  ctx.fillText(`Timestamp: ${state.quizResult.timestamp} • Duration: ${state.quizResult.timeFormatted}`, 65, 655);
 
   ctx.fillStyle = "#94a3b8";
   ctx.font = "14px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
@@ -789,17 +891,18 @@ function downloadResultCardImage() {
 
 
 // =============================================================================
-// 11. RETAKE / RESET QUIZ
+// 12. RETAKE / RESET QUIZ (GENERATES FRESH RANDOMIZED QUESTION SET)
 // =============================================================================
 
 function resetQuiz() {
+  stopQuizTimer();
   state.currentQuestionIndex = 0;
-  state.selectedAnswers = new Array(QUIZ_QUESTIONS.length).fill(null);
+  state.activeQuestions = [];
+  state.selectedAnswerIds = [];
   state.quizResult = null;
   state.isSubmitting = false;
 
-  // Clear inputs if requested or let participant retain name
-  // To keep it clean and allow another student on the same phone:
+  // Clear inputs for the next attempt or next student
   DOM.participantForm.reset();
   clearFieldError(DOM.inputFullName, DOM.nameError);
   clearFieldError(DOM.inputRollNumber, DOM.rollError);
@@ -810,11 +913,11 @@ function resetQuiz() {
 
 
 // =============================================================================
-// 12. EVENT LISTENERS INITIALIZATION
+// 13. EVENT LISTENERS INITIALIZATION
 // =============================================================================
 
 function initEventListeners() {
-  // Screen 1: Start Challenge
+  // Screen 1: Start Challenge -> Details Screen
   DOM.btnStartChallenge.addEventListener("click", () => {
     showScreen("details");
   });
@@ -843,7 +946,7 @@ function initEventListeners() {
     }
   });
 
-  // Screen 2: Form Submission -> Start Quiz
+  // Screen 2: Form Submission -> Start Quiz with Fresh Randomization & Start Timer
   DOM.participantForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -855,30 +958,53 @@ function initEventListeners() {
     state.participant.rollNumber = DOM.inputRollNumber.value.trim();
     state.participant.email = DOM.inputEmail.value.trim();
 
-    // Reset quiz answers & start from question 0
+    // Generate FRESH randomized question set & shuffled options via Fisher-Yates
+    state.activeQuestions = createRandomizedQuizSession();
     state.currentQuestionIndex = 0;
-    state.selectedAnswers = new Array(QUIZ_QUESTIONS.length).fill(null);
+    state.selectedAnswerIds = new Array(state.activeQuestions.length).fill(null);
 
+    // Render first question and switch screen
     renderCurrentQuestion();
     showScreen("quiz");
+
+    // START TIMER NOW (only when entering the first question)
+    startQuizTimer();
   });
 
   // Screen 3: Next Question / Submit
   DOM.btnNextQuestion.addEventListener("click", handleNextOrSubmit);
 
-  // Screen 4: Download Result Card
+  // Screen 4: Download Result Card Image
   DOM.btnDownloadResult.addEventListener("click", downloadResultCardImage);
 
-  // Screen 4: Take Quiz Again
+  // Screen 4: Take Quiz Again -> Generates brand new random attempt
   DOM.btnRetakeQuiz.addEventListener("click", resetQuiz);
 }
 
 
 // =============================================================================
-// 13. BOOTSTRAP APPLICATION
+// 14. SECURITY: IGNORE ANY ATTEMPTED SCORE MANIPULATION IN URL
+// =============================================================================
+
+function sanitizeUrlParams() {
+  if (window.location.search) {
+    // If URL contains queries like ?score=10, cleanly strip them
+    try {
+      const cleanUrl = window.location.origin + window.location.pathname;
+      window.history.replaceState({}, document.title, cleanUrl);
+    } catch (_) {
+      // Ignore if running locally or file protocol
+    }
+  }
+}
+
+
+// =============================================================================
+// 15. BOOTSTRAP APPLICATION
 // =============================================================================
 
 document.addEventListener("DOMContentLoaded", () => {
+  sanitizeUrlParams();
   initEventListeners();
   showScreen("welcome");
 });

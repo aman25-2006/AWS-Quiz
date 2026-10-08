@@ -693,6 +693,7 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.6rem;
+  gap: 0.5rem;
 }
 
 .counter-badge {
@@ -700,6 +701,38 @@ body {
   font-weight: 700;
   color: var(--text-main);
   letter-spacing: 0.02em;
+}
+
+.quiz-timer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-main);
+  background: #090e18;
+  border: 1px solid var(--border-subtle);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-pill);
+  font-variant-numeric: tabular-nums;
+}
+
+.timer-icon {
+  font-size: 0.85rem;
+}
+
+.timer-label {
+  color: var(--text-dim);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.timer-value {
+  color: var(--aws-orange);
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+  font-weight: 700;
 }
 
 .progress-percent {
@@ -1081,81 +1114,95 @@ body {
 /* Score Card */
 .score-display-card {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 0.75rem;
-  margin-bottom: 1.25rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 0.85rem;
 }
 
-.score-primary-block {
+.score-primary-block,
+.score-percentage-block,
+.score-time-block {
   background: #090e18;
   border: 1.5px solid var(--border-card);
   border-radius: var(--radius-md);
-  padding: 0.85rem;
+  padding: 0.85rem 0.4rem;
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-.score-title {
-  font-size: 0.7rem;
+.score-title,
+.percentage-title,
+.time-title {
+  font-size: 0.66rem;
   font-weight: 800;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   color: var(--text-dim);
   text-transform: uppercase;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.25rem;
 }
 
 .score-fraction {
   display: flex;
   align-items: baseline;
   justify-content: center;
-  gap: 0.2rem;
+  gap: 0.15rem;
   line-height: 1;
 }
 
 .score-number {
-  font-size: 2.3rem;
+  font-size: 1.9rem;
   font-weight: 900;
   color: var(--aws-orange);
 }
 
 .score-divider {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   color: var(--text-dim);
 }
 
 .score-total {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   font-weight: 700;
   color: var(--text-muted);
 }
 
-.score-percentage-block {
-  background: #090e18;
-  border: 1.5px solid var(--border-card);
-  border-radius: var(--radius-md);
-  padding: 0.85rem;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.percentage-title {
-  font-size: 0.7rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  color: var(--text-dim);
-  text-transform: uppercase;
-  margin-bottom: 0.2rem;
-}
-
 .percentage-value {
-  font-size: 2.1rem;
+  font-size: 1.85rem;
   font-weight: 900;
-  color: #ffffff;
+  color: #10b981;
   line-height: 1;
+}
+
+.time-value {
+  font-size: 1.7rem;
+  font-weight: 900;
+  color: #38bdf8;
+  font-family: var(--font-mono);
+  line-height: 1;
+}
+
+/* Tie-Breaker Note */
+.tie-breaker-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.76rem;
+  color: var(--text-dim);
+  background: rgba(13, 20, 34, 0.65);
+  border: 1px dashed var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.75rem;
+  line-height: 1.35;
+  margin-bottom: 1.25rem;
+}
+
+.tie-icon {
+  font-size: 0.95rem;
+  color: var(--aws-orange);
+  flex-shrink: 0;
+  margin-top: 1px;
 }
 
 /* Result Category Card */
