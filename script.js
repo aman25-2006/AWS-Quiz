@@ -15,8 +15,9 @@ const CONFIG = {
   // Official AWS Builder Center Portal Link:
   AWS_BUILDER_CENTER_URL: "https://builder.aws.com/",
 
-  // Storage keys to enforce strictly ONE ATTEMPT per student:
+  // Storage keys to enforce strictly ONE ATTEMPT & termination per student:
   STORAGE_KEY_COMPLETED: "aws_builder_challenge_completed",
+  STORAGE_KEY_TERMINATED: "aws_builder_challenge_terminated",
   STORAGE_KEY_RECORD: "aws_builder_challenge_record"
 };
 
@@ -969,7 +970,11 @@ const state = {
   currentQuestionIndex: 0,
   selectedAnswerIds: [], // Stores selected option ID for each question
   quizResult: null, // { score, total, percentage, timeSeconds, timeFormatted, timeDescriptive, category, resultId, timestamp }
-  isSubmitting: false
+  isSubmitting: false,
+  // Anti-cheat two-strike system state
+  violations: 0,
+  isTerminated: false,
+  pendingWarning: false
 };
 
 // Accurate Timer Tracking variables
@@ -1050,7 +1055,8 @@ const DOM = {
     welcome: document.getElementById("screenWelcome"),
     details: document.getElementById("screenDetails"),
     quiz: document.getElementById("screenQuiz"),
-    result: document.getElementById("screenResult")
+    result: document.getElementById("screenResult"),
+    terminated: document.getElementById("screenTerminated")
   },
 
   // Welcome Screen
@@ -1101,7 +1107,15 @@ const DOM = {
   linkGoogleForm: document.getElementById("linkGoogleForm"),
   linkAwsBuilderCenter: document.getElementById("linkAwsBuilderCenter"),
   attemptNoticeCard: document.getElementById("attemptNoticeCard"),
-  exportCanvas: document.getElementById("exportCanvas")
+  exportCanvas: document.getElementById("exportCanvas"),
+
+  // Anti-Cheat Elements
+  violationWarningModal: document.getElementById("violationWarningModal"),
+  btnDismissWarning: document.getElementById("btnDismissWarning"),
+  termParticipantName: document.getElementById("termParticipantName"),
+  termRollNumber: document.getElementById("termRollNumber"),
+  termEmail: document.getElementById("termEmail"),
+  linkTerminatedGoogleForm: document.getElementById("linkTerminatedGoogleForm")
 };
 
 
@@ -1541,6 +1555,14 @@ function setupCtaLinks() {
     DOM.linkAwsBuilderCenter.rel = "noopener noreferrer";
     DOM.linkAwsBuilderCenter.onclick = null;
   }
+
+  // Google Form Link on Terminated Screen
+  if (DOM.linkTerminatedGoogleForm) {
+    DOM.linkTerminatedGoogleForm.href = CONFIG.GOOGLE_FORM_URL;
+    DOM.linkTerminatedGoogleForm.target = "_blank";
+    DOM.linkTerminatedGoogleForm.rel = "noopener noreferrer";
+    DOM.linkTerminatedGoogleForm.onclick = null;
+  }
 }
 
 
@@ -1784,16 +1806,150 @@ function downloadResultCardImage() {
 
 
 // =============================================================================
-// 12. EVENT LISTENERS INITIALIZATION
+// 12. ANTI-CHEAT: SCREEN-LEAVE & TAB-SWITCH TWO-STRIKE DETECTION
+// =============================================================================
+
+let isScreenAway = false;
+let lastViolationTimestamp = 0;
+
+function handleScreenLeave() {
+  // Anti-cheat detection is strictly active ONLY during the live quiz screen
+  if (state.currentScreen !== "quiz" || state.isSubmitting || state.isTerminated) {
+    return;
+  }
+
+  // Prevent multiple duplicate events while the user remains away from the tab
+  if (isScreenAway) {
+    return;
+  }
+
+  const now = Date.now();
+  // 2-second cooldown to guard against rapid consecutive events (e.g. blur immediately followed by visibilitychange)
+  if (now - lastViolationTimestamp < 2000) {
+    return;
+  }
+
+  isScreenAway = true;
+  lastViolationTimestamp = now;
+  state.violations++;
+
+  if (state.violations === 1) {
+    // Strike 1: Queue warning to display as soon as participant returns to the tab
+    state.pendingWarning = true;
+  } else if (state.violations >= 2) {
+    // Strike 2: Second violation immediately terminates the quiz attempt
+    terminateQuizDueToViolations();
+  }
+}
+
+function handleScreenReturn() {
+  if (state.isTerminated) return;
+  if (!isScreenAway) return;
+  isScreenAway = false;
+
+  // Only handle warning if still within active quiz
+  if (state.currentScreen !== "quiz" || state.isSubmitting) return;
+
+  if (state.pendingWarning) {
+    state.pendingWarning = false;
+    showViolationWarningModal();
+  }
+}
+
+function showViolationWarningModal() {
+  if (DOM.violationWarningModal) {
+    DOM.violationWarningModal.hidden = false;
+  }
+}
+
+function dismissViolationWarningModal() {
+  if (DOM.violationWarningModal) {
+    DOM.violationWarningModal.hidden = true;
+  }
+}
+
+function terminateQuizDueToViolations() {
+  state.isTerminated = true;
+  stopQuizTimer();
+
+  // Dismiss any open warning modal
+  dismissViolationWarningModal();
+
+  // Permanently lock the attempt in sessionStorage as terminated & completed
+  try {
+    sessionStorage.setItem(CONFIG.STORAGE_KEY_TERMINATED, "true");
+    sessionStorage.setItem(CONFIG.STORAGE_KEY_COMPLETED, "true");
+    sessionStorage.setItem(CONFIG.STORAGE_KEY_RECORD, JSON.stringify({
+      participant: state.participant,
+      terminated: true,
+      reason: "multiple_screen_leave"
+    }));
+  } catch (err) {
+    console.warn("Storage lock error:", err);
+  }
+
+  // Populate participant details on Terminated Screen
+  if (DOM.termParticipantName) DOM.termParticipantName.textContent = state.participant.fullName || "—";
+  if (DOM.termRollNumber) DOM.termRollNumber.textContent = state.participant.rollNumber || "—";
+  if (DOM.termEmail) DOM.termEmail.textContent = state.participant.email || "—";
+
+  // Setup Google Form Link
+  if (DOM.linkTerminatedGoogleForm) {
+    DOM.linkTerminatedGoogleForm.href = CONFIG.GOOGLE_FORM_URL;
+    DOM.linkTerminatedGoogleForm.target = "_blank";
+    DOM.linkTerminatedGoogleForm.rel = "noopener noreferrer";
+  }
+
+  // Show terminated screen
+  showScreen("terminated");
+}
+
+function checkSessionTermination() {
+  let isTerm = false;
+  try {
+    isTerm = sessionStorage.getItem(CONFIG.STORAGE_KEY_TERMINATED) === "true";
+  } catch (_) {
+    return false;
+  }
+
+  if (isTerm) {
+    state.isTerminated = true;
+    try {
+      const raw = sessionStorage.getItem(CONFIG.STORAGE_KEY_RECORD);
+      if (raw) {
+        const record = JSON.parse(raw);
+        if (record && record.participant) {
+          state.participant = record.participant;
+          if (DOM.termParticipantName) DOM.termParticipantName.textContent = state.participant.fullName || "—";
+          if (DOM.termRollNumber) DOM.termRollNumber.textContent = state.participant.rollNumber || "—";
+          if (DOM.termEmail) DOM.termEmail.textContent = state.participant.email || "—";
+        }
+      }
+    } catch (_) {}
+
+    if (DOM.linkTerminatedGoogleForm) {
+      DOM.linkTerminatedGoogleForm.href = CONFIG.GOOGLE_FORM_URL;
+      DOM.linkTerminatedGoogleForm.target = "_blank";
+      DOM.linkTerminatedGoogleForm.rel = "noopener noreferrer";
+    }
+
+    showScreen("terminated");
+    return true;
+  }
+  return false;
+}
+
+
+// =============================================================================
+// 13. EVENT LISTENERS INITIALIZATION
 // =============================================================================
 
 function initEventListeners() {
   // Screen 1: Start Challenge
   DOM.btnStartChallenge.addEventListener("click", () => {
-    // If the student already completed their quiz attempt, show their locked result card
-    if (restoreCompletedQuiz()) {
-      return;
-    }
+    // If student was terminated or already completed, route directly
+    if (checkSessionTermination()) return;
+    if (restoreCompletedQuiz()) return;
     showScreen("details");
   });
 
@@ -1825,10 +1981,8 @@ function initEventListeners() {
   DOM.participantForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    // Check if student already completed
-    if (restoreCompletedQuiz()) {
-      return;
-    }
+    if (checkSessionTermination()) return;
+    if (restoreCompletedQuiz()) return;
 
     if (!validateParticipantForm()) {
       return;
@@ -1837,6 +1991,12 @@ function initEventListeners() {
     state.participant.fullName = DOM.inputFullName.value.trim();
     state.participant.rollNumber = DOM.inputRollNumber.value.trim();
     state.participant.email = DOM.inputEmail.value.trim();
+
+    // Reset violations for this quiz run
+    state.violations = 0;
+    state.isTerminated = false;
+    state.pendingWarning = false;
+    isScreenAway = false;
 
     // Select 10 questions with balanced distribution across the 5 domains & shuffle options
     state.activeQuestions = selectBalancedQuizSession();
@@ -1856,11 +2016,34 @@ function initEventListeners() {
 
   // Screen 4: Download Result Card Image
   DOM.btnDownloadResult.addEventListener("click", downloadResultCardImage);
+
+  // Anti-Cheat: Dismiss Warning Modal
+  if (DOM.btnDismissWarning) {
+    DOM.btnDismissWarning.addEventListener("click", dismissViolationWarningModal);
+  }
+
+  // Anti-Cheat: Primary detector (visibilitychange API)
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+      handleScreenLeave();
+    } else if (document.visibilityState === "visible") {
+      handleScreenReturn();
+    }
+  });
+
+  // Anti-Cheat: Supplementary window blur & focus events
+  window.addEventListener("blur", () => {
+    handleScreenLeave();
+  });
+
+  window.addEventListener("focus", () => {
+    handleScreenReturn();
+  });
 }
 
 
 // =============================================================================
-// 13. SECURITY: IGNORE ANY ATTEMPTED SCORE MANIPULATION IN URL
+// 14. SECURITY: IGNORE ANY ATTEMPTED SCORE MANIPULATION IN URL
 // =============================================================================
 
 function sanitizeUrlParams() {
@@ -1876,14 +2059,19 @@ function sanitizeUrlParams() {
 
 
 // =============================================================================
-// 14. BOOTSTRAP APPLICATION
+// 15. BOOTSTRAP APPLICATION
 // =============================================================================
 
 document.addEventListener("DOMContentLoaded", () => {
   sanitizeUrlParams();
   initEventListeners();
 
-  // If this participant has already taken the quiz in this session, show their locked result
+  // 1. Check if user was previously terminated due to anti-cheat violations
+  if (checkSessionTermination()) {
+    return;
+  }
+
+  // 2. If this participant has already taken the quiz in this session, show their locked result
   const alreadyCompleted = restoreCompletedQuiz();
   if (!alreadyCompleted) {
     showScreen("welcome");

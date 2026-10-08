@@ -8,7 +8,7 @@
   <title>AWS Builder Challenge | Tabling Event Quiz</title>
   
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <link rel="stylesheet" href="style.css?v=3.0">
+  <link rel="stylesheet" href="style.css?v=3.1">
 </head>
 <body>
   <!-- Background Glow & Grid Elements -->
@@ -509,7 +509,92 @@
       </div>
     </section>
 
+
+    <!-- ========================================== -->
+    <!-- SCREEN 5: TERMINATED SCREEN (ANTI-CHEAT)   -->
+    <!-- ========================================== -->
+    <section id="screenTerminated" class="screen" aria-labelledby="terminatedHeading" hidden>
+      <div class="container screen-container">
+        
+        <div class="card terminated-card">
+          <div class="terminated-badge">
+            <span class="terminated-icon" aria-hidden="true">🚫</span>
+            <span>ATTEMPT TERMINATED</span>
+          </div>
+
+          <h2 id="terminatedHeading" class="terminated-title">Quiz Attempt Terminated</h2>
+          
+          <p class="terminated-message">
+            Your quiz attempt was terminated because you left the quiz screen multiple times.
+          </p>
+
+          <div class="terminated-details-box">
+            <div class="meta-row">
+              <span class="sub-label">Participant:</span>
+              <strong id="termParticipantName" class="meta-val">—</strong>
+            </div>
+            <div class="meta-row">
+              <span class="sub-label">Roll Number:</span>
+              <span id="termRollNumber" class="meta-val">—</span>
+            </div>
+            <div class="meta-row">
+              <span class="sub-label">Email:</span>
+              <span id="termEmail" class="meta-val">—</span>
+            </div>
+            <div class="meta-row">
+              <span class="sub-label">Status:</span>
+              <span class="meta-val violation-highlight">Invalidated (Multiple Screen-Leave Violations)</span>
+            </div>
+          </div>
+
+          <div class="terminated-notice-note">
+            <p>
+              To ensure fairness and prevent unauthorized browsing during the challenge, leaving or switching away from the quiz window is strictly prohibited.
+            </p>
+          </div>
+
+          <div class="terminated-cta-group">
+            <p class="terminated-cta-hint">
+              If the event organizers requested your details, you may still submit the participation form:
+            </p>
+            <a id="linkTerminatedGoogleForm" href="https://forms.gle/wGGXvvW8SRhWueuV8" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-block btn-lg">
+              <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
+                <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>
+              </svg>
+              <span>SUBMIT PARTICIPATION FORM</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
   </main>
+
+  <!-- Strike 1 Warning Modal -->
+  <div id="violationWarningModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="warningModalHeading" hidden>
+    <div class="modal-card">
+      <div class="modal-header">
+        <span class="modal-alert-icon" aria-hidden="true">⚠️</span>
+        <h3 id="warningModalHeading" class="modal-title">Warning</h3>
+      </div>
+      <div class="modal-body">
+        <p class="modal-text">
+          <strong>You left the quiz screen.</strong> One more screen-leave will terminate your quiz attempt.
+        </p>
+        <div class="strike-tracker">
+          <span class="strike-badge">Strike 1 of 2</span>
+          <span class="strike-sub">Next strike terminates the quiz</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btnDismissWarning" class="btn btn-primary btn-block btn-lg" type="button">
+          <span>I UNDERSTAND — RESUME QUIZ</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- Footer -->
   <footer class="site-footer">
@@ -529,6 +614,6 @@
   <!-- Hidden Canvas for Offline Image Card Generation -->
   <canvas id="exportCanvas" style="display:none;" width="1200" height="720"></canvas>
 
-  <script src="script.js?v=3.0"></script>
+  <script src="script.js?v=3.1"></script>
 </body>
 </html>

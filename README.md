@@ -95,12 +95,26 @@ Both the question sequence and all 4 options per question are independently shuf
 
 ---
 
-## 🔒 Strict Single-Attempt Rule (Tabling Event Integrity)
+## 🛡️ Anti-Cheating: Screen-Leave & Tab-Switch Detection (Two-Strike System)
 
-To maintain fair competition during physical tabling events:
-- **One Attempt Only**: Participants are allowed strictly 1 official attempt per browser session.
-- **Session Locking**: On quiz completion, the score and participant record are permanently locked in `sessionStorage`.
-- **No Retakes**: All "Take Quiz Again" restart buttons have been removed. If a user refreshes or revisits the page, their locked digital result card is displayed immediately with a reminder to submit their screenshot to the Participation Form.
+To discourage searching for answers on Google or switching to other apps during the live challenge, the app monitors active window and document visibility state:
+
+### How It Works:
+* **Detection APIs**: Uses standard, non-invasive browser APIs (`document.visibilityState === "hidden"`, `visibilitychange`, and window `blur`/`focus`).
+* **Active Scope**: Operates **strictly during the active quiz** (ignoring Welcome, Details, and Result screens).
+* **Ordinary Interactions Allowed**: Normal scrolling, answer selecting, moving between questions, or tapping buttons do not trigger violations.
+
+### Two-Strike Policy:
+1. **Strike 1 (Warning)**:
+   * Leaving the quiz screen triggers an alert modal when returning:  
+     `⚠️ Warning: You left the quiz screen. One more screen-leave will terminate your quiz attempt.`
+   * The quiz and timer continue without resetting. The participant dismisses the modal to continue.
+2. **Strike 2 (Termination)**:
+   * Leaving the quiz screen a second time **immediately terminates** the attempt.
+   * The timer is stopped and frozen.
+   * The attempt is invalidated and permanently locked in `sessionStorage`.
+   * A dedicated **Quiz Attempt Terminated** screen replaces the quiz, displaying the participant's name, roll number, and reason.
+   * The normal score is withheld; only the **Submit Participation Form** link is provided so organizers have their record.
 
 ---
 
