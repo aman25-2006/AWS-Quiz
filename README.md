@@ -68,7 +68,7 @@ const CONFIG = {
   GOOGLE_FORM_URL: "https://forms.gle/wGGXvvW8SRhWueuV8",
 
   // AWS Builder Center Portal Link:
-  AWS_BUILDER_CENTER_URL: "https://builder.aws.amazon.com/"
+  AWS_BUILDER_CENTER_URL: "https://builder.aws.com/"
 };
 ```
 

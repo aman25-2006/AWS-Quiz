@@ -11,8 +11,8 @@ const CONFIG = {
   // Official Event Google Form Link for Screenshot Submission:
   GOOGLE_FORM_URL: "https://forms.gle/wGGXvvW8SRhWueuV8",
 
-  // AWS Builder Center Portal Link:
-  AWS_BUILDER_CENTER_URL: "https://builder.aws.amazon.com/"
+  // Official AWS Builder Center Portal Link:
+  AWS_BUILDER_CENTER_URL: "https://builder.aws.com/"
 };
 
 
@@ -315,6 +315,7 @@ const DOM = {
   resScoreValue: document.getElementById("resScoreValue"),
   resPercentageValue: document.getElementById("resPercentageValue"),
   resTimeValue: document.getElementById("resTimeValue"),
+  resTimeDescriptive: document.getElementById("resTimeDescriptive"),
   categoryContainer: document.getElementById("categoryContainer"),
   resCategoryIcon: document.getElementById("resCategoryIcon"),
   resCategoryTitle: document.getElementById("resCategoryTitle"),
@@ -575,6 +576,9 @@ function submitQuiz() {
   stopQuizTimer();
   const totalSeconds = Math.max(0, Math.floor(finalElapsedMs / 1000));
   const timeFormatted = formatTime(totalSeconds);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  const timeDescriptive = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
 
   // 2. Automatically calculate score comparing selected option ID with correctAnswerId
   let correctCount = 0;
@@ -589,18 +593,20 @@ function submitQuiz() {
   const categoryInfo = calculateResultCategory(correctCount);
   const resultId = generateResultId();
 
-  // Format current date & time
+  // 3. Format actual date & exact completion timestamp with seconds (e.g. Oct 08, 2026 • 02:07:35 PM)
   const now = new Date();
   const dateFormatted = now.toLocaleDateString("en-US", {
     month: "short",
-    day: "numeric",
+    day: "2-digit",
     year: "numeric"
   });
   const timeOfDayFormatted = now.toLocaleTimeString("en-US", {
     hour: "2-digit",
-    minute: "2-digit"
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true
   });
-  const timestampString = `${dateFormatted} • ${timeOfDayFormatted}`;
+  const actualTimestampString = `${dateFormatted} • ${timeOfDayFormatted}`;
 
   // Store result in state
   state.quizResult = {
@@ -609,9 +615,10 @@ function submitQuiz() {
     percentage: percentage,
     timeSeconds: totalSeconds,
     timeFormatted: timeFormatted,
+    timeDescriptive: timeDescriptive,
     category: categoryInfo,
     resultId: resultId,
-    timestamp: timestampString
+    timestamp: actualTimestampString
   };
 
   // Populate Result Card DOM
@@ -622,11 +629,14 @@ function submitQuiz() {
   DOM.resScoreValue.textContent = correctCount;
   DOM.resPercentageValue.textContent = `${percentage}%`;
   DOM.resTimeValue.textContent = timeFormatted;
+  if (DOM.resTimeDescriptive) {
+    DOM.resTimeDescriptive.textContent = timeDescriptive;
+  }
   
   DOM.resCategoryIcon.textContent = categoryInfo.icon;
   DOM.resCategoryTitle.textContent = categoryInfo.title;
   DOM.resCategoryMessage.textContent = categoryInfo.message;
-  DOM.resTimestampText.textContent = timestampString;
+  DOM.resTimestampText.textContent = actualTimestampString;
 
   // Category styling theme
   DOM.categoryContainer.className = `category-result-card ${categoryInfo.themeClass}`;
@@ -646,14 +656,20 @@ function submitQuiz() {
 
 function setupCtaLinks() {
   // Google Form Link (Exact event link)
-  DOM.linkGoogleForm.href = CONFIG.GOOGLE_FORM_URL;
-  DOM.linkGoogleForm.target = "_blank";
-  DOM.linkGoogleForm.rel = "noopener noreferrer";
+  if (DOM.linkGoogleForm) {
+    DOM.linkGoogleForm.href = CONFIG.GOOGLE_FORM_URL;
+    DOM.linkGoogleForm.target = "_blank";
+    DOM.linkGoogleForm.rel = "noopener noreferrer";
+    DOM.linkGoogleForm.onclick = null;
+  }
 
   // AWS Builder Center Link
-  DOM.linkAwsBuilderCenter.href = CONFIG.AWS_BUILDER_CENTER_URL;
-  DOM.linkAwsBuilderCenter.target = "_blank";
-  DOM.linkAwsBuilderCenter.rel = "noopener noreferrer";
+  if (DOM.linkAwsBuilderCenter) {
+    DOM.linkAwsBuilderCenter.href = CONFIG.AWS_BUILDER_CENTER_URL;
+    DOM.linkAwsBuilderCenter.target = "_blank";
+    DOM.linkAwsBuilderCenter.rel = "noopener noreferrer";
+    DOM.linkAwsBuilderCenter.onclick = null;
+  }
 }
 
 
@@ -826,7 +842,11 @@ function downloadResultCardImage() {
 
   ctx.fillStyle = "#38bdf8";
   ctx.font = "bold 44px 'Courier New', monospace";
-  ctx.fillText(`${state.quizResult.timeFormatted}`, scoreCardX + 375, scoreCardY + 105);
+  ctx.fillText(`${state.quizResult.timeFormatted}`, scoreCardX + 375, scoreCardY + 95);
+
+  ctx.fillStyle = "#94a3b8";
+  ctx.font = "bold 15px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+  ctx.fillText(`(${state.quizResult.timeDescriptive})`, scoreCardX + 375, scoreCardY + 125);
 
   // 6. Category Banner
   const catBoxY = 335;
@@ -862,7 +882,7 @@ function downloadResultCardImage() {
 
   ctx.fillStyle = "#64748b";
   ctx.font = "13px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
-  ctx.fillText(`Timestamp: ${state.quizResult.timestamp} • Duration: ${state.quizResult.timeFormatted}`, 65, 655);
+  ctx.fillText(`Completed At: ${state.quizResult.timestamp} • Time Taken: ${state.quizResult.timeFormatted} (${state.quizResult.timeDescriptive})`, 65, 655);
 
   ctx.fillStyle = "#94a3b8";
   ctx.font = "14px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";

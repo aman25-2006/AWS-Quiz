@@ -8,7 +8,7 @@
   <title>AWS Builder Challenge | Tabling Event Quiz</title>
   
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2.2">
 </head>
 <body>
   <!-- Background Glow & Grid Elements -->
@@ -357,6 +357,7 @@
             <div class="score-time-block">
               <span class="time-title">TIME TAKEN</span>
               <span id="resTimeValue" class="time-value">00:00</span>
+              <span id="resTimeDescriptive" class="time-descriptive-sub">0s</span>
             </div>
           </div>
 
@@ -387,7 +388,8 @@
               <span class="verify-text">Verified Event Activity Challenge</span>
             </div>
             <div class="verification-date">
-              <span id="resTimestampText">Oct 08, 2026</span>
+              <span class="timestamp-label">Actual Completion Timestamp:</span>
+              <strong id="resTimestampText" class="timestamp-val">Oct 08, 2026 • 02:07:35 PM</strong>
             </div>
             <div class="organizer-footer-sign">
               Organized by Aman Kumar • AWS Student Builder Campus Leader
@@ -483,7 +485,7 @@
             </div>
           </div>
 
-          <a id="linkAwsBuilderCenter" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
+          <a id="linkAwsBuilderCenter" href="https://builder.aws.com/" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
             <span>JOIN AWS BUILDER CENTER</span>
             <svg class="btn-arrow" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
               <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
@@ -526,6 +528,6 @@
   <!-- Hidden Canvas for Offline Image Card Generation -->
   <canvas id="exportCanvas" style="display:none;" width="1200" height="720"></canvas>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=2.2"></script>
 </body>
 </html>

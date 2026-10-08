@@ -1183,6 +1183,14 @@ body {
   line-height: 1;
 }
 
+.time-descriptive-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-top: 0.2rem;
+  letter-spacing: 0.02em;
+}
+
 /* Tie-Breaker Note */
 .tie-breaker-note {
   display: flex;
@@ -1300,6 +1308,26 @@ body {
 
 .verification-date {
   color: var(--text-muted);
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.timestamp-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  letter-spacing: 0.03em;
+  font-weight: 700;
+}
+
+.timestamp-val {
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
 }
 
 .organizer-footer-sign {
